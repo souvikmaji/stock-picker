@@ -63,7 +63,6 @@ def std(prices, start_date, end_date):
 
 def max_profit(stock_prices, start_date, end_date):
     prices = stock_prices_in_range(stock_prices, start_date, end_date)
-    print(prices)
 
     length = len(prices)
     if length < 2:
@@ -84,39 +83,48 @@ def max_profit(stock_prices, start_date, end_date):
     return buy, sell
 
 
+def parse_queries(prices):
+    start_date = date_parser(
+        input("From which date you want to start? :- "))
+    end_date = date_parser(
+        input("Till which date you want to analyze? :- "))
+    # max_diff(stock_prices[stock_name])
+    if start_date > end_date:
+        print("start date is greater than end date")
+    else:
+        mean_price = mean(prices, start_date, end_date)
+        std_price = std(prices, start_date, end_date)
+        buy, sell = max_profit(prices, start_date, end_date)
+        profit = sell.price - buy.price
+
+        if profit <= 0:
+            print("No profit can not be made in the specified date range")
+        else:
+            print(
+                f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
+
+
 def main():
     filename = get_file_name()
-
     stock_prices = get_stock_prices(filename)
 
     # welcome text
     print(Figlet(font="starwars").renderText("Stock Picker"))
+    print("Welcome Agent!")
 
-    stock_name = input(
-        "Welcome Agent! Which stock you need to process? :- ").upper()
-    if stock_name in stock_prices:
-        prices = stock_prices[stock_name]
-        start_date = date_parser(
-            input("From which date you want to start? :- "))
-        end_date = date_parser(
-            input("Till which date you want to analyze? :- "))
-        # max_diff(stock_prices[stock_name])
-        if start_date > end_date:
-            print("start date is greater than end date")
+    while True:
+        stock_name = input(
+            "\nWhich stock you need to process? :- ").upper()
+        if stock_name in stock_prices:
+            parse_queries(stock_prices[stock_name])
         else:
-            mean_price = mean(prices, start_date, end_date)
-            std_price = std(prices, start_date, end_date)
-            buy, sell = max_profit(prices, start_date, end_date)
-            profit = sell.price - buy.price
+            print("Oops. Stock Not Found")
+        
+        is_continue = input("Do you want to continue? (y or n) :- ").lower()
+        if is_continue != "y":
+            break
 
-            if profit <= 0:
-                print("No profit can not be made in the specified date range")
-            else:
-                print(
-                    f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
-
-    else:
-        print("Oops. Stock Not Found")
+    print("Thanks for using. Goodbye!")
 
 
 if __name__ == "__main__":
