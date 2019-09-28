@@ -54,26 +54,22 @@ def stock_prices_in_range(prices, start_date, end_date):
     return list(price for price in prices if start_date <= price.date <= end_date)
 
 
-def mean(prices, start_date, end_date):
-    prices_in_date_range = list(
-        p.price for p in stock_prices_in_range(prices, start_date, end_date))
-    if not prices_in_date_range:
+def mean(price_range):
+    prices_in_range = list(p.price for p in price_range)
+    if not prices_in_range:
         return 0
-    return statistics.mean(prices_in_date_range)
+    return statistics.mean(prices_in_range)
 
 
-def std(prices, start_date, end_date):
-    prices_in_date_range = list(
-        p.price for p in stock_prices_in_range(prices, start_date, end_date))
+def std(price_range):
+    prices_in_range = list(p.price for p in price_range)
     # variance requires at least two data points
-    if len(prices_in_date_range) < 2:
+    if len(prices_in_range) < 2:
         return 0
-    return statistics.stdev(prices_in_date_range)
+    return statistics.stdev(prices_in_range)
 
 
-def max_profit(stock_prices, start_date, end_date):
-    prices = stock_prices_in_range(stock_prices, start_date, end_date)
-
+def max_profit(prices):
     length = len(prices)
     if length < 2:
         return 0, 0
@@ -93,25 +89,35 @@ def max_profit(stock_prices, start_date, end_date):
     return buy, sell
 
 
-def parse_queries(prices):
-    start_date = date_parser(
-        input("From which date you want to start? :- "))
-    end_date = date_parser(
-        input("Till which date you want to analyze? :- "))
-    # max_diff(stock_prices[stock_name])
-    if start_date > end_date:
-        print("Sorry. The Start Date cannot be greater than the End Date")
-    else:
-        mean_price = mean(prices, start_date, end_date)
-        std_price = std(prices, start_date, end_date)
-        buy, sell = max_profit(prices, start_date, end_date)
-        profit = sell.price - buy.price
+def get_date_range():
+    start_date = date_parser(input("From which date you want to start? :- "))
+    end_date = date_parser(input("Till which date you want to analyze? :- "))
 
-        if profit <= 0:
-            print("No profit can not be made in the specified date range")
-        else:
-            print(
-                f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
+    if start_date > end_date:
+        raise ValueError(f"The Start Date ({start_date}) cannot be greater than the End Date {end_date}")
+
+    return start_date, end_date
+
+
+def parse_queries(prices, start_date, end_date):
+    price_range = stock_prices_in_range(prices, start_date, end_date)
+    if not len(price_range):
+        print("No data found for the stock in given date range")
+        return
+
+    mean_price = mean(price_range)
+    std_price = std(price_range)
+    buy, sell = max_profit(price_range)
+    if buy is None or sell is None:
+        print("")
+
+    profit = sell.price - buy.price
+
+    if profit <= 0:
+        print("No profit can not be made in the specified date range")
+        return
+    print(
+        f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
 
 
 def is_done():
@@ -130,7 +136,10 @@ def get_stock_name(stocks):
         if possible_name in stocks:
             return possible_name
         name, score = process.extractOne(possible_name, stocks.keys())
-        option = input(f"Do you mean {name}? (y):-")
+        if score < 50:
+            print("Stock name not found.")
+            continue
+        option = input(f"Do you mean {name}? (y):- ")
         if option.lower() == "y":
             return name.upper()
         print("Please try again.")
@@ -154,9 +163,10 @@ def main():
     while True:
         stock_name = get_stock_name(stock_prices)
         try:
-            parse_queries(stock_prices[stock_name])
+            start, end = get_date_range()
+            parse_queries(stock_prices[stock_name], start, end)
         except ValueError as v:
-            print(f"Error in query parsing. Cause: {v}. Please try again.")
+            print(f"Error in parsing query. Cause: {v}. Please try again.")
 
         if is_done():
             break
