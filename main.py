@@ -30,7 +30,7 @@ def get_stock_prices(filename):
 
     # sort list of StockPrices based on date
     for stock, prices in stock_prices.items():
-        stock_prices[stock] = sorted(prices, key=attrgetter('date'))
+        stock_prices[stock] = sorted(prices, key=attrgetter("date"))
 
     return stock_prices
 
@@ -90,7 +90,7 @@ def main():
     stock_prices = get_stock_prices(filename)
 
     # welcome text
-    print(Figlet(font='starwars').renderText('Stock Picker'))
+    print(Figlet(font="starwars").renderText("Stock Picker"))
 
     stock_name = input(
         "Welcome Agent! Which stock you need to process? :- ").upper()
