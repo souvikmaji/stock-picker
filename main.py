@@ -1,16 +1,20 @@
-import csv
-from dateutil.parser import parse as date_parser
 import argparse
+import csv
 import statistics
-from operator import attrgetter
 from collections import namedtuple
+from operator import attrgetter
+
+from dateutil.parser import parse as date_parser
+
+from pyfiglet import Figlet
 
 StockPrice = namedtuple("StockPrice", "date, price")
 
 
 def get_file_name():
     parser = argparse.ArgumentParser()
-    parser.add_argument("pathtocsv", help="path to the csv file containing stock information")
+    parser.add_argument(
+        "pathtocsv", help="path to the csv file containing stock information")
     args = parser.parse_args()
     return args.pathtocsv
 
@@ -20,7 +24,8 @@ def get_stock_prices(filename):
     with open(filename) as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=',')
         for row in csv_reader:
-            stock_price = StockPrice(date=date_parser(row["StockDate"]), price=float(row["StockPrice"]))
+            stock_price = StockPrice(date=date_parser(
+                row["StockDate"]), price=float(row["StockPrice"]))
             stock_prices.setdefault(row["StockName"], []).append(stock_price)
 
     # sort list of StockPrices based on date
@@ -40,14 +45,16 @@ def stock_prices_in_range(prices, start_date, end_date):
 
 
 def mean(prices, start_date, end_date):
-    prices_in_date_range = list(p.price for p in stock_prices_in_range(prices, start_date, end_date))
+    prices_in_date_range = list(
+        p.price for p in stock_prices_in_range(prices, start_date, end_date))
     if not prices_in_date_range:
         return 0
     return statistics.mean(prices_in_date_range)
 
 
 def std(prices, start_date, end_date):
-    prices_in_date_range = list(p.price for p in stock_prices_in_range(prices, start_date, end_date))
+    prices_in_date_range = list(
+        p.price for p in stock_prices_in_range(prices, start_date, end_date))
     # variance requires at least two data points
     if len(prices_in_date_range) < 2:
         return 0
@@ -81,13 +88,18 @@ def main():
     filename = get_file_name()
 
     stock_prices = get_stock_prices(filename)
-    print_stock_prices(stock_prices)
 
-    stock_name = input("Welcome Agent! Which stock you need to process? :- ").upper()
+    # welcome text
+    print(Figlet(font='starwars').renderText('Stock Picker'))
+
+    stock_name = input(
+        "Welcome Agent! Which stock you need to process? :- ").upper()
     if stock_name in stock_prices:
         prices = stock_prices[stock_name]
-        start_date = date_parser(input("From which date you want to start? :- "))
-        end_date = date_parser(input("Till which date you want to analyze? :- "))
+        start_date = date_parser(
+            input("From which date you want to start? :- "))
+        end_date = date_parser(
+            input("Till which date you want to analyze? :- "))
         # max_diff(stock_prices[stock_name])
         if start_date > end_date:
             print("start date is greater than end date")
@@ -102,7 +114,7 @@ def main():
             else:
                 print(
                     f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
- 
+
     else:
         print("Oops. Stock Not Found")
 
