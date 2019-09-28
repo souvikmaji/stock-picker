@@ -27,10 +27,4 @@ python main.py pathtocsv
 
 ### Error Handling
 
-- [ ] File not found
-- [ ] Csv parsing: date, price parsing error in user input and csv file
-
 ### Decorations
-
-- [ ] Closest Match for file input
-- [ ] Pyfiglet for ascii welcome text

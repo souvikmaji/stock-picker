@@ -3,6 +3,7 @@ import csv
 import statistics
 from collections import namedtuple
 from operator import attrgetter
+from fuzzywuzzy import process
 
 from dateutil.parser import parse as date_parser
 
@@ -34,7 +35,7 @@ def get_stock_prices(filename):
         for row in csv_reader:
             stock_price = StockPrice(date=date_parser(
                 row["StockDate"]), price=float(row["StockPrice"]))
-            stock_prices.setdefault(row["StockName"], []).append(stock_price)
+            stock_prices.setdefault(row["StockName"].upper(), []).append(stock_price)
 
     # sort list of StockPrices based on date
     for stock, prices in stock_prices.items():
@@ -98,7 +99,7 @@ def parse_queries(prices):
         input("Till which date you want to analyze? :- "))
     # max_diff(stock_prices[stock_name])
     if start_date > end_date:
-        print("start date is greater than end date")
+        print("Sorry. The Start Date cannot be greater than the End Date")
     else:
         mean_price = mean(prices, start_date, end_date)
         std_price = std(prices, start_date, end_date)
@@ -122,6 +123,18 @@ def is_done():
         print("Sorry I do not understand.")
 
 
+def get_stock_name(stocks):
+    while True:
+        possible_name = input("\nWhich stock you need to process? :- ").upper()
+        if possible_name in stocks:
+            return possible_name
+        name, score = process.extractOne(possible_name, stocks.keys())
+        option = input(f"Do you mean {name}? (y):-")
+        if option.lower() == "y":
+            return name.upper()
+        print("Please try again.")
+
+
 def main():
     filename = get_file_name()
     try:
@@ -138,17 +151,12 @@ def main():
     print("Welcome Agent!")
 
     while True:
-        stock_name = input(
-            "\nWhich stock you need to process? :- ").upper()
-        if stock_name in stock_prices:
-            try:
-                parse_queries(stock_prices[stock_name])
-            except ValueError as v:
-                print(f"Error in query parsing. Cause: {v}. Please try again.")
-            
-        else:
-            print("Oops! Stock Not Found.")
-        
+        stock_name = get_stock_name(stock_prices)     
+        try:
+            parse_queries(stock_prices[stock_name])
+        except ValueError as v:
+            print(f"Error in query parsing. Cause: {v}. Please try again.")
+
         if is_done():
             break
 
