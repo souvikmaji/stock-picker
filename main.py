@@ -101,7 +101,7 @@ def get_date_range():
 
 def parse_queries(prices, start_date, end_date):
     price_range = stock_prices_in_range(prices, start_date, end_date)
-    if not len(price_range):
+    if not price_range:
         print("No data found for the stock in given date range")
         return
 
