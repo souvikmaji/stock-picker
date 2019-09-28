@@ -23,6 +23,7 @@ def get_stock_prices(filename):
             stock_price = StockPrice(date=date_parser(row["StockDate"]), price=float(row["StockPrice"]))
             stock_prices.setdefault(row["StockName"], []).append(stock_price)
 
+    # sort list of StockPrices based on date
     for stock, prices in stock_prices.items():
         stock_prices[stock] = sorted(prices, key=attrgetter('date'))
 
@@ -34,33 +35,46 @@ def print_stock_prices(stock_prices):
         print(stock, prices)
 
 
-# def max_diff(prices):
-#     length = len(prices)
-#     if length < 2:
-#         return 0, 0
-    
-#     max_profit = prices[1] - prices[0]
-#     min_price = prices[0]
-
-#     for i in range(1, length):
-#         if prices[i] > 
-
-def prices_in_range(prices, start_date, end_date):
-    return list(p.price for p in prices if start_date <= p.date <= end_date)
+def stock_prices_in_range(prices, start_date, end_date):
+    return list(price for price in prices if start_date <= price.date <= end_date)
 
 
 def mean(prices, start_date, end_date):
-    prices_in_date_range = prices_in_range(prices, start_date, end_date)
+    prices_in_date_range = list(p.price for p in stock_prices_in_range(prices, start_date, end_date))
     if not prices_in_date_range:
         return 0
     return statistics.mean(prices_in_date_range)
 
 
 def std(prices, start_date, end_date):
-    prices_in_date_range = prices_in_range(prices, start_date, end_date)
-    if not prices_in_date_range:
+    prices_in_date_range = list(p.price for p in stock_prices_in_range(prices, start_date, end_date))
+    # variance requires at least two data points
+    if len(prices_in_date_range) < 2:
         return 0
     return statistics.stdev(prices_in_date_range)
+
+
+def max_profit(stock_prices, start_date, end_date):
+    prices = stock_prices_in_range(stock_prices, start_date, end_date)
+    print(prices)
+
+    length = len(prices)
+    if length < 2:
+        return 0, 0
+
+    buy = prices[0]
+    sell = prices[1]
+    max_profit = sell.price - buy.price
+
+    for i in range(1, length):
+        if prices[i].price - buy.price > max_profit:
+            sell = prices[i]
+            max_profit = sell.price - buy.price
+
+        if prices[i].price < buy.price:
+            buy = prices[i]
+
+    return buy, sell
 
 
 def main():
@@ -80,8 +94,14 @@ def main():
         else:
             mean_price = mean(prices, start_date, end_date)
             std_price = std(prices, start_date, end_date)
-            print(
-                f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tstart date: {start_date}\tend date: {end_date}")
+            buy, sell = max_profit(prices, start_date, end_date)
+            profit = sell.price - buy.price
+
+            if profit <= 0:
+                print("No profit can not be made in the specified date range")
+            else:
+                print(
+                    f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
  
     else:
         print("Oops. Stock Not Found")

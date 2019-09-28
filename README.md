@@ -21,23 +21,16 @@ python main.py pathtocsv
 
 ### Feature
 
-- [x] Csv file input
-- [x] File parsing
-- [ ] Input Questionaire
-- [ ] Mean and Std Deviation
-- [x] Date, Price parsing
-- [ ] Maximum Profit
 - [ ] Makefile
 - [ ] Unit tests
+- [ ] Pydoc
 
 ### Error Handling
 
 - [ ] File not found
 - [ ] Csv parsing: date, price parsing error in user input and csv file
-- [x] Csv file ordering
 
 ### Decorations
 
 - [ ] Closest Match for file input
 - [ ] Pyfiglet for ascii welcome text
-
