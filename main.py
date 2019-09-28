@@ -3,10 +3,10 @@ import csv
 import statistics
 from collections import namedtuple
 from operator import attrgetter
-from fuzzywuzzy import process
 
 from dateutil.parser import parse as date_parser
 
+from fuzzywuzzy import process
 from pyfiglet import Figlet
 
 StockPrice = namedtuple("StockPrice", "date, price")
@@ -15,7 +15,7 @@ StockPrice = namedtuple("StockPrice", "date, price")
 def get_file_name():
     """Parses command line arguments to get the csv filepath
 
-    Returns: filepath 
+    Returns: filepath
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -35,7 +35,8 @@ def get_stock_prices(filename):
         for row in csv_reader:
             stock_price = StockPrice(date=date_parser(
                 row["StockDate"]), price=float(row["StockPrice"]))
-            stock_prices.setdefault(row["StockName"].upper(), []).append(stock_price)
+            stock_prices.setdefault(
+                row["StockName"].upper(), []).append(stock_price)
 
     # sort list of StockPrices based on date
     for stock, prices in stock_prices.items():
@@ -151,7 +152,7 @@ def main():
     print("Welcome Agent!")
 
     while True:
-        stock_name = get_stock_name(stock_prices)     
+        stock_name = get_stock_name(stock_prices)
         try:
             parse_queries(stock_prices[stock_name])
         except ValueError as v:
