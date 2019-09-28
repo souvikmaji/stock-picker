@@ -12,6 +12,10 @@ StockPrice = namedtuple("StockPrice", "date, price")
 
 
 def get_file_name():
+    """Parses command line arguments to get the csv filepath
+
+    Returns: filepath 
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "pathtocsv", help="path to the csv file containing stock information")
@@ -20,6 +24,10 @@ def get_file_name():
 
 
 def get_stock_prices(filename):
+    """Parses csv file to get prices of all the stocks
+
+    Returns: dictionary of stock prices with company code as key and a list of price variations as values
+    """
     stock_prices = {}
     with open(filename) as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=',')
@@ -106,7 +114,11 @@ def parse_queries(prices):
 
 def main():
     filename = get_file_name()
-    stock_prices = get_stock_prices(filename)
+    try:
+        stock_prices = get_stock_prices(filename)
+    except IOError as e:
+        print("Sorry Error Reading File. Cause: ", e)
+        exit(1)
 
     # welcome text
     print(Figlet(font="starwars").renderText("Stock Picker"))
