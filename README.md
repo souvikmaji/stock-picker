@@ -27,11 +27,13 @@ python main.py pathtocsv
 - [ ] Mean and Std Deviation
 - [x] Date, Price parsing
 - [ ] Maximum Profit
+- [ ] Makefile
+- [ ] Unit tests
 
 ### Error Handling
 
 - [ ] File not found
-- [ ] Csv parsing: date, price parsing error
+- [ ] Csv parsing: date, price parsing error in user input and csv file
 - [x] Csv file ordering
 
 ### Decorations

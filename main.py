@@ -1,6 +1,11 @@
 import csv
-from dateutil.parser import parse
+from dateutil.parser import parse as date_parser
 import argparse
+import statistics
+from operator import attrgetter
+from collections import namedtuple
+
+StockPrice = namedtuple("StockPrice", "date, price")
 
 
 def get_file_name():
@@ -15,11 +20,11 @@ def get_stock_prices(filename):
     with open(filename) as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=',')
         for row in csv_reader:
-            date_price = {parse(row["StockDate"]): float(row["StockPrice"])}
-            stock_prices.setdefault(row["StockName"], []).append(date_price)
+            stock_price = StockPrice(date=date_parser(row["StockDate"]), price=float(row["StockPrice"]))
+            stock_prices.setdefault(row["StockName"], []).append(stock_price)
 
     for stock, prices in stock_prices.items():
-        stock_prices[stock] = sorted(prices, key=lambda x: list(x.keys()))
+        stock_prices[stock] = sorted(prices, key=attrgetter('date'))
 
     return stock_prices
 
@@ -29,11 +34,57 @@ def print_stock_prices(stock_prices):
         print(stock, prices)
 
 
+# def max_diff(prices):
+#     length = len(prices)
+#     if length < 2:
+#         return 0, 0
+    
+#     max_profit = prices[1] - prices[0]
+#     min_price = prices[0]
+
+#     for i in range(1, length):
+#         if prices[i] > 
+
+def prices_in_range(prices, start_date, end_date):
+    return list(p.price for p in prices if start_date <= p.date <= end_date)
+
+
+def mean(prices, start_date, end_date):
+    prices_in_date_range = prices_in_range(prices, start_date, end_date)
+    if not prices_in_date_range:
+        return 0
+    return statistics.mean(prices_in_date_range)
+
+
+def std(prices, start_date, end_date):
+    prices_in_date_range = prices_in_range(prices, start_date, end_date)
+    if not prices_in_date_range:
+        return 0
+    return statistics.stdev(prices_in_date_range)
+
+
 def main():
     filename = get_file_name()
 
     stock_prices = get_stock_prices(filename)
     print_stock_prices(stock_prices)
+
+    stock_name = input("Welcome Agent! Which stock you need to process? :- ").upper()
+    if stock_name in stock_prices:
+        prices = stock_prices[stock_name]
+        start_date = date_parser(input("From which date you want to start? :- "))
+        end_date = date_parser(input("Till which date you want to analyze? :- "))
+        # max_diff(stock_prices[stock_name])
+        if start_date > end_date:
+            print("start date is greater than end date")
+        else:
+            mean_price = mean(prices, start_date, end_date)
+            std_price = std(prices, start_date, end_date)
+            print(
+                f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tstart date: {start_date}\tend date: {end_date}")
+ 
+    else:
+        print("Oops. Stock Not Found")
 
 
 if __name__ == "__main__":
