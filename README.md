@@ -1,5 +1,17 @@
 # Stock Picker
 
+Install Dependencies
+
+```sh
+pip install -r requirements.txt
+```
+
+Run:
+
+```sh
+python main.py pathtocsv
+```
+
 ## Assumptions
 
 1. Dates appear in no particular order.
@@ -20,6 +32,7 @@
 
 - [ ] File not found
 - [ ] Csv parsing: date, price parsing error
+- [x] Csv file ordering
 
 ### Decorations
 
