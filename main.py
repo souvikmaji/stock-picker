@@ -112,12 +112,25 @@ def parse_queries(prices):
                 f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
 
 
+def is_done():
+    while True:
+        option = input("Do you want to continue? (y or n) :- ").lower()
+        if option == "y":
+            return False
+        if option == "n":
+            return True
+        print("Sorry I do not understand.")
+
+
 def main():
     filename = get_file_name()
     try:
         stock_prices = get_stock_prices(filename)
     except IOError as e:
         print("Sorry Error Reading File. Cause: ", e)
+        exit(1)
+    except ValueError as v:
+        print("Error in file parsing. Cause: ", v)
         exit(1)
 
     # welcome text
@@ -128,12 +141,15 @@ def main():
         stock_name = input(
             "\nWhich stock you need to process? :- ").upper()
         if stock_name in stock_prices:
-            parse_queries(stock_prices[stock_name])
+            try:
+                parse_queries(stock_prices[stock_name])
+            except ValueError as v:
+                print(f"Error in query parsing. Cause: {v}. Please try again.")
+            
         else:
-            print("Oops. Stock Not Found")
+            print("Oops! Stock Not Found.")
         
-        is_continue = input("Do you want to continue? (y or n) :- ").lower()
-        if is_continue != "y":
+        if is_done():
             break
 
     print("Thanks for using. Goodbye!")
