@@ -11,5 +11,10 @@ exclude_patterns = [
 [[analyzers]]
 name = 'python'
 enabled = true
+dependency_file_paths = [
+  "requirements.txt",
+]
 runtime_version = '3.x.x'
 max_line_length = 120
+name = "test-coverage"
+enabled = true
