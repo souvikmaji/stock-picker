@@ -127,17 +127,17 @@ def max_profit(prices):
 
     buy = prices[0]
     sell = prices[1]
-    max_profit = sell.price - buy.price
+    profit = sell.price - buy.price
 
     for i in range(1, length):
-        if prices[i].price - buy.price > max_profit:
+        if prices[i].price - buy.price > profit:
             sell = prices[i]
-            max_profit = sell.price - buy.price
+            profit = sell.price - buy.price
 
         if prices[i].price < buy.price:
             buy = prices[i]
 
-    if max_profit == 0:
+    if profit == 0:
         return None, None
     return buy, sell
 
