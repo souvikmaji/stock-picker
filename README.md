@@ -3,7 +3,7 @@
 Install Dependencies
 
 ```sh
-pip install -r requirements.txt
+make init
 ```
 
 Run:
@@ -12,10 +12,13 @@ Run:
 python main.py pathtocsv
 ```
 
-## Assumptions
+Run unit tests:
 
-1. Dates appear in no particular order.
-2. If a date appears twice for the same company, it is not an error scenario. The date appearing later overwrites the previous data.
+```sh
+make test
+```
+
+Code is tested in python3 environment.
 
 ## TODO
 
@@ -28,3 +31,7 @@ python main.py pathtocsv
 ### Error Handling
 
 ### Decorations
+
+- Format date and price outputs
+
+
