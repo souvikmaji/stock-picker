@@ -22,16 +22,4 @@ Code is tested in python3 environment.
 
 ## TODO
 
-### Feature
-
-- [ ] Makefile
-- [ ] Unit tests
-- [ ] Pydoc
-
-### Error Handling
-
-### Decorations
-
-- Format date and price outputs
-
-
+- Format date and price outputs in human readable formats

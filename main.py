@@ -4,7 +4,7 @@ import statistics
 from collections import namedtuple
 from operator import attrgetter
 
-from dateutil.parser import parse as date_parser
+from dateutil.parser import parse as dateutil_parser
 
 from fuzzywuzzy import process
 from pyfiglet import Figlet
@@ -22,6 +22,15 @@ def get_file_name():
         "pathtocsv", help="path to the csv file containing stock information")
     args = parser.parse_args()
     return args.pathtocsv
+
+
+def date_parser(inputStr):
+    """DateTime Factory.
+
+    input: date string
+    output: DateTime
+    """
+    return dateutil_parser(inputStr, dayfirst=True, yearfirst=False)
 
 
 def get_stock_prices(filename):
