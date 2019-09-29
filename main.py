@@ -25,16 +25,16 @@ def get_file_name():
     return args.pathtocsv
 
 
-def date_parser(inputStr):
+def date_parser(input_str):
     """DateTime Factory.
 
     Parameter:
-    inputStr (string): date string.
+    input_str (string): date string.
 
     Returns:
     DateTime: Datetime object parsed from input string.
     """
-    return dateutil_parser(inputStr, dayfirst=True, yearfirst=False)
+    return dateutil_parser(input_str, dayfirst=True, yearfirst=False)
 
 
 def get_stock_prices(filename):
@@ -44,7 +44,7 @@ def get_stock_prices(filename):
     filename (string): csv file path.
 
     Returns:
-    dict: dictionary of stock prices with company code as key and a list of StockPrice tuples.
+    dict: dictionary of stock prices. key: company code, value: list of StockPrice tuples.
     """
     stock_prices = {}
     with open(filename) as csv_file:
@@ -156,7 +156,7 @@ def get_date_range():
 
 
 def parse_queries(prices, start_date, end_date):
-    """Prints mean, standard deviation and date range to maximize profit with maximum possible profit.
+    """Prints mean, standard deviation and date range to maximize profit.
 
     Parameter:
     prices (list): StockPrice list of a single stock.
@@ -212,6 +212,9 @@ def get_stock_name(stocks):
 
 
 def main():
+    """Main method.
+    Orchestrator for the stock picker application.
+    """
     filename = get_file_name()
     try:
         stock_prices = get_stock_prices(filename)
