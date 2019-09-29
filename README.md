@@ -1,5 +1,7 @@
 # Stock Picker
 
+A command line tool to analyze stocks. 
+
 Install Dependencies
 
 ```sh
@@ -10,6 +12,13 @@ Run:
 
 ```sh
 python main.py pathtocsv
+```
+
+Format of the csv file:
+```csv
+StockName,StockDate,StockPrice
+AICIXE,20-Jan-2019,20.453
+...
 ```
 
 Run unit tests:
