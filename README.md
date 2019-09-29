@@ -1,5 +1,7 @@
 # Stock Picker
 
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light.svg)](https://deepsource.io/gh/souvikmaji/stock-picker/?ref=repository-badge)
+
 A command line tool to analyze stocks. 
 
 Install Dependencies
