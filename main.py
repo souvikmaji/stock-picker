@@ -78,7 +78,7 @@ def stock_prices_in_range(prices, start_date, end_date):
 
 def mean(price_range):
     """Calculates mean of a StockPrices list.
-    List must contains atleast a single element.
+    List must contains at least a single element.
     For empty lists returns 0.
 
     Parameter:
@@ -143,7 +143,7 @@ def max_profit(prices):
 
 
 def get_date_range():
-    """Promts user to get start and end date.
+    """Prompts user to get start and end date.
     If end date is greater than start date raises ValueError
     """
     start_date = date_parser(input("From which date you want to start? :- "))
@@ -156,7 +156,7 @@ def get_date_range():
 
 
 def parse_queries(prices, start_date, end_date):
-    """Prints mean, standard deviation and date range to maximize profit with maximum posssible profit.
+    """Prints mean, standard deviation and date range to maximize profit with maximum possible profit.
 
     Parameter:
     prices (list): StockPrice list of a single stock.
@@ -176,11 +176,11 @@ def parse_queries(prices, start_date, end_date):
     else:
         profit = sell.price - buy.price
         print(
-            f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date}\tSell date: {sell.date}\tProfit: {profit}")
+            f"Here is your result :- \nMean: {mean_price}\tStd: {std_price}\tBuy Date: {buy.date.strftime('%d-%b-%Y')}\tSell date: {sell.date.strftime('%d-%b-%Y')}\tProfit: {profit}")
 
 
 def is_done():
-    """Promts for user input if they want to continue or not.
+    """Prompts for user input if they want to continue or not.
     Possible options for input: y/n.
     """
     while True:
@@ -193,7 +193,7 @@ def is_done():
 
 
 def get_stock_name(stocks):
-    """Promts user to get stock name they want to query.
+    """Prompts user to get stock name they want to query.
     Partial matches are allowed.
     If stock name is not found asks again.
     """
