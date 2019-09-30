@@ -5,26 +5,34 @@ target = __import__("main")
 sp = target.StockPrice
 
 
-class TestEmptyRange(unittest.TestCase):
+class TestMean(unittest.TestCase):
     def setUp(self):
-        self.price_range = []
+        self.test_cases = [{"input": [sp(0, 1), sp(0, 2), sp(0, 90), sp(0, 10), sp(0, 110)],
+                            "output": 42.6},
+                           {"input": [sp(0, 5)],
+                            "output": 5},
+                           {"input": [],
+                            "output": 0}]
 
-    def test_mean(self):
-        self.assertEqual(target.mean(self.price_range), 0)
+    def test_data(self):
+        for test_case in self.test_cases:
+            self.assertEqual(target.mean(test_case["input"]), test_case["output"])
+
+
+class TestStd(unittest.TestCase):
+    def setUp(self):
+        self.test_cases = [{"input": [sp(0, 1), sp(0, 2), sp(0, 90), sp(0, 10), sp(0, 110)],
+                            "output": 52.988678035973},
+                           {"input": [sp(0, 5)],
+                            "output": 0},
+                           {"input": [sp(0, 5), sp(0, 10)],
+                            "output": 3.535533906},
+                           {"input": [],
+                            "output": 0}]
 
     def test_std(self):
-        self.assertEqual(target.std(self.price_range), 0)
-
-
-class TestRangeData(unittest.TestCase):
-    def setUp(self):
-        self.price_range = [sp(0, 1), sp(0, 2), sp(0, 90), sp(0, 10), sp(0, 110)]
-
-    def test_mean(self):
-        self.assertEqual(target.mean(self.price_range), 42.6)
-
-    def test_std(self):
-        self.assertAlmostEqual(target.std(self.price_range), 52.988678035973, places=5)
+        for test_case in self.test_cases:
+            self.assertAlmostEqual(target.std(test_case["input"]), test_case["output"], places=5)
 
 
 class TestMaxProfit(unittest.TestCase):
