@@ -1,4 +1,5 @@
 import unittest
+import datetime
 
 target = __import__("main")
 
@@ -33,6 +34,31 @@ class TestStd(unittest.TestCase):
     def test_std(self):
         for test_case in self.test_cases:
             self.assertAlmostEqual(target.std(test_case["input"]), test_case["output"], places=5)
+
+
+class TestStockPricesInRange(unittest.TestCase):
+    def setUp(self):
+        self.test_cases = [{"input": [sp(datetime.date(2019, 4, 1), 0), sp(datetime.date(2019, 4, 2), 0), sp(datetime.date(2019, 4, 3), 0), sp(datetime.date(2019, 4, 4), 0), sp(datetime.date(2019, 4, 5), 0)],
+                            "start_date": datetime.date(2019, 4, 2),
+                           "end_date": datetime.date(2019, 4, 4),
+                            "output": [sp(datetime.date(2019, 4, 2), 0), sp(datetime.date(2019, 4, 3), 0), sp(datetime.date(2019, 4, 4), 0)]},
+                           {"input": [sp(datetime.date(2019, 4, 1), 0), sp(datetime.date(2019, 4, 2), 0), sp(datetime.date(2019, 4, 3), 0), sp(datetime.date(2019, 4, 2), 0), sp(datetime.date(2019, 4, 1), 0)],
+                            "start_date": datetime.date(2019, 4, 2),
+                            "end_date": datetime.date(2019, 4, 4),
+                            "output": [sp(datetime.date(2019, 4, 2), 0), sp(datetime.date(2019, 4, 3), 0), sp(datetime.date(2019, 4, 2), 0)]},
+                           {"input": [sp(datetime.date(2019, 4, 1), 0), sp(datetime.date(2019, 4, 2), 0)],
+                            "start_date": datetime.date(2019, 4, 2),
+                            "end_date": datetime.date(2019, 4, 2),
+                            "output": [sp(datetime.date(2019, 4, 2), 0)]},
+                           {"input": [],
+                            "start_date": datetime.date(2019, 4, 2),
+                            "end_date": datetime.date(2019, 4, 2),
+                            "output": []},
+                           ]
+
+    def test_data(self):
+        for test_case in self.test_cases:
+            self.assertListEqual(target.stock_prices_in_range(test_case["input"], test_case["start_date"], test_case["end_date"]), test_case["output"])
 
 
 class TestMaxProfit(unittest.TestCase):
