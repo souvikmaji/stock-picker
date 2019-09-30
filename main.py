@@ -125,19 +125,22 @@ def max_profit(prices):
     if length < 2:
         return None, None
 
+    min_price = prices[0]
     buy = prices[0]
     sell = prices[1]
     profit = sell.price - buy.price
 
     for i in range(1, length):
-        if prices[i].price - buy.price > profit:
+
+        if prices[i].price - min_price.price > profit:
+            buy = min_price
             sell = prices[i]
             profit = sell.price - buy.price
 
-        if prices[i].price < buy.price:
-            buy = prices[i]
-
-    if profit == 0:
+        if prices[i].price < min_price.price:
+            min_price = prices[i]
+      
+    if profit <= 0:
         return None, None
     return buy, sell
 
