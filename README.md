@@ -69,5 +69,4 @@ Thanks For Using. Goodbye!
 ## TODO
 
 - Round floats up to 3 decimal places for output.
-- Refactor unit test structures.
 - Increase code coverage.
