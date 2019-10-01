@@ -48,12 +48,15 @@ def get_stock_prices(filename):
     """
     stock_prices = {}
     with open(filename) as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        csv_reader = csv.DictReader(csv_file, delimiter=',', strict=True)
         for row in csv_reader:
             stock_price = StockPrice(date=date_parser(
                 row["StockDate"]), price=float(row["StockPrice"]))
             stock_prices.setdefault(
                 row["StockName"].upper(), []).append(stock_price)
+
+    if len(stock_prices) == 0:
+        raise ValueError("Empty CSV file.")
 
     # sort list of StockPrices based on date
     for stock, prices in stock_prices.items():
