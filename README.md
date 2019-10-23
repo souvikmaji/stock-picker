@@ -70,3 +70,6 @@ Thanks For Using. Goodbye!
 
 - Round floats up to 3 decimal places for output.
 - Increase code coverage.
+- https://pypi.org/project/tabulate/
+- use a questionaire package
+- test coverage shield
